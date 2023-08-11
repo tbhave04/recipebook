@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>My Recipes</title>
+  <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='main.css') }}">
+</head>
+
+<body>
+  <h1>My Recipes</h1>
+
+  <div class="search-bar">
+    <form action="{{ url_for('home') }}" method="GET">
+      <input type="text" name="search" placeholder="Search..." />
+      <button type="submit">Search</button>
+    </form>
+  </div>
+
+  <button id="myBtn">Upload File</button>
+    <!-- The Modal -->
+    <div id="myModal" class="modal">
+    <!-- Modal content -->
+        <div class="modal-content">
+            <form method = "post" enctype="multipart/form-data">
+                <span class="close">&times;</span>
+                <p>Click below to select a file:</p>
+                <input type="file" id="file" name = "file" accept=".txt, .pdf, .doc, .jpg, .png" />
+                <input type = "submit" value="Upload"> 
+            </form>
+        </div>
+    </div>
+
+
+    <div class="recipe-container">
+      {% for recipe in recipes %}
+        <div class="recipe">
+          <a href="{{ url_for('recipe_details', recipe_index=recipe.id) }}">
+            <h3>{{ recipe.title }}</h3>
+          </a>
+          <form action="{{ url_for('delete_recipe', recipe_index=recipe.id) }}" method="POST" class="delete-form">
+            <button type="submit" class="delete-button">&#x2716;</button>
+          </form>
+        </div>
+        {% if loop.index % 5 == 0 %}
+          <div style="clear:both;"></div>
+        {% endif %}
+      {% endfor %}
+    </div>
+
+  <script>
+    // Get the modal
+    var modal = document.getElementById("myModal");
+
+    // Get the button that opens the modal
+    var btn = document.getElementById("myBtn");
+
+    // Get the <span> element that closes the modal
+    var span = document.getElementsByClassName("close")[0];
+
+    // When the user clicks the button, open the modal 
+    btn.onclick = function() {
+    modal.style.display = "block";
+    }
+
+    // When the user clicks on <span> (x), close the modal
+    span.onclick = function() {
+    modal.style.display = "none";
+    }
+
+    // When the user clicks anywhere outside of the modal, close it
+    window.onclick = function(event) {
+    if (event.target == modal) {
+        modal.style.display = "none";
+    }
+    }
+
+    // Triggered when file selection changes
+    document.getElementById("fileInput").addEventListener("change", function() {
+      // Perform file upload logic here
+      // For demonstration purposes, let's simply close the modal after 1 second
+      setTimeout(function() {
+        closeModal();
+      }, 1000);
+    });
+
+
+    document.querySelector('#searchInput').addEventListener('input', filterList)
+
+    function filterList(){
+      console.log('Entering filterList function');
+      const searchInput = document.querySelector('#searchInput')
+      const filter = searchInput.value.toLowerCase()
+      const recipeContainer = document.querySelector('.recipe-container');
+      const recipeElements = recipeContainer.querySelectorAll('.recipe');
+
+      recipeElements.forEach(function(recipeElement) {
+      const recipeTitle = recipeElement.querySelector('h3').innerText.toLowerCase();
+
+      if (recipeTitle.includes(filter)) {
+        recipeElement.style.display = 'block';
+      } 
+      else {
+        recipeElement.style.display = 'none';
+      }
+    });
+    }
+    
+  </script>
+
+
+</body>
+</html>

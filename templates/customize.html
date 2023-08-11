@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Edit Recipe</title>
+  <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='recipe.css') }}">
+  <style>
+    #dropzone {
+      border: 2px dashed #ccc;
+      padding: 20px;
+      text-align: center;
+    }
+
+    img {
+      max-width: 100%;
+      max-height: 200px;
+      margin-bottom: 10px;
+    }
+  </style>
+  <script>
+    function allowDrop(event) {
+      event.preventDefault();
+    }
+
+    function handleDrop(event) {
+      event.preventDefault();
+      var file = event.dataTransfer.files[0];
+      var reader = new FileReader();
+      reader.onload = function(e) {
+        var img = document.createElement("img");
+        img.src = e.target.result;
+        document.getElementById("images").appendChild(img);
+      };
+      reader.readAsDataURL(file);
+    }
+
+    function submitForm() {
+      var title = document.getElementById("title").value;
+      var ingredients = document.getElementById("ingredients").value;
+      var instructions = document.getElementById("instructions").value;
+      var images = document.getElementById("images").getElementsByTagName("img");
+
+    }
+  </script>
+</head>
+
+<body>
+  <h1>Edit Recipe</h1>
+
+  <form id="editForm" action="/submit" method="POST">
+    <label for="title">Title:</label>
+    <input type="text" id="title" name="title" value="Enter the title here"><br>
+
+    <label for="ingredients">Ingredients:</label><br>
+    <textarea id="ingredients" name="ingredients" rows="4" cols="50">{{msg}}</textarea><br>
+
+    <label for="instructions">Instructions:</label><br>
+    <textarea id="instructions" name="instructions" rows="4" cols="50">Enter the instructions here</textarea><br>
+
+    <div id="dropzone" ondrop="handleDrop(event)" ondragover="allowDrop(event)">
+      <p>Drag and drop images here</p>
+    </div>
+    <div id="images"></div>
+
+    <input type="submit" value = "Submit">
+  </form>
+</body>
+</html>

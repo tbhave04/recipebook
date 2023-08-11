@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Recipe Details</title>
+  <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='recipe.css') }}">
+</head>
+
+<body>
+  <h1>Recipe Details</h1>
+
+  <div class="recipe-details">
+    <h2>{{ recipe.title }}</h2>
+    <h3>Ingredients:</h3>
+    <p>{{ recipe.ingredients }}</p>
+    <h3>Instructions:</h3>
+    <p>{{ recipe.instructions }}</p>
+  </div>
+
+  <a href="{{ url_for('home') }}">Back to Home</a>
+
+</body>
+</html>
